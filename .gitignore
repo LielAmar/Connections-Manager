@@ -1,0 +1,22 @@
+### Java ###
+*.class
+*.classpath
+*.project
+*.factorypath
+*.apt_generated
+*.settings
+*.springBeans
+*.sts4-cache
+
+### Folders ###
+target
+test
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
