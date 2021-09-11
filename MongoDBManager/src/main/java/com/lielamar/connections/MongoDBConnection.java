@@ -1,12 +1,12 @@
 package com.lielamar.connections;
 
-import com.lielamar.connections.config.DatabaseConnectionConfig;
 import com.lielamar.connections.exceptions.ConnectionNotOpenException;
 import com.lielamar.connections.exceptions.EntryNotFoundException;
 import com.lielamar.connections.serializable.SerializableDocument;
 import com.lielamar.connections.serializable.SerializableObject;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -15,6 +15,9 @@ import org.bson.Document;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public class MongoDBConnection extends DatabaseConnection {
@@ -60,26 +63,52 @@ public class MongoDBConnection extends DatabaseConnection {
 
 
     @Override
-    public @NotNull <T extends SerializableObject> T getObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws ConnectionNotOpenException {
+    public @NotNull <T extends SerializableObject> CompletableFuture<T> getObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws ConnectionNotOpenException {
         if(this.getConnection() == null || this.isClosed())
             throw new ConnectionNotOpenException("MongoDB");
 
-        T object = supplier.get();
-        object.setIdentifier(identifier);
+        return CompletableFuture.supplyAsync(() -> {
+            T object = supplier.get();
+            object.setIdentifier(identifier);
 
-        MongoCollection<Document> collection = getConnection().getDatabase(object.getDatabase().getName()).getCollection(object.getCollection().getName());
+            MongoCollection<Document> collection = getConnection().getDatabase(object.getDatabase().getName()).getCollection(object.getCollection().getName());
 
-        Document findQuery = new Document(this.getConfig().getIdentifierFieldName(), identifier);
-        Document oldDocument = collection.find(findQuery).first();
+            Document findQuery = new Document(this.getConfig().getIdentifierFieldName(), identifier);
+            Document oldDocument = collection.find(findQuery).first();
 
-        if(oldDocument != null && oldDocument.containsKey(object.getSystem().getName())) {
-            Object systemDocument = oldDocument.get(object.getSystem().getName());
+            if(oldDocument != null && oldDocument.containsKey(object.getSystem().getName())) {
+                Object systemDocument = oldDocument.get(object.getSystem().getName());
 
-            if(systemDocument != null)
-                object.read(new SerializableDocument((Document) systemDocument));
-        }
+                if(systemDocument != null)
+                    object.read(new SerializableDocument((Document) systemDocument));
+            }
 
-        return object;
+            return object;
+        });
+    }
+
+    @Override
+    public <T extends SerializableObject> @NotNull CompletableFuture<List<T>> getAllObjects(@NotNull Supplier<T> supplier) throws ConnectionNotOpenException {
+        if(this.getConnection() == null || this.isClosed())
+            throw new ConnectionNotOpenException("MongoDB");
+
+        return CompletableFuture.supplyAsync(() -> {
+            List<T> objects = new ArrayList<>();
+
+            T instance = supplier.get();
+
+            MongoCollection<Document> collection = this.getConnection().getDatabase(instance.getDatabase().getName()).getCollection(instance.getCollection().getName());
+            FindIterable<Document> docs = collection.find();
+
+            for(Document document : docs) {
+                T object = supplier.get();
+                object.setIdentifier(document.getString(this.getConfig().getIdentifierFieldName()));
+                object.read(new SerializableDocument(document));
+                objects.add(object);
+            }
+
+            return objects;
+        });
     }
 
     @Override

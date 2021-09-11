@@ -5,8 +5,9 @@ import com.lielamar.connections.exceptions.ConnectionNotOpenException;
 import com.lielamar.connections.exceptions.EntryNotFoundException;
 import com.lielamar.connections.serializable.SerializableObject;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public abstract class DatabaseConnection extends Connection {
@@ -27,7 +28,9 @@ public abstract class DatabaseConnection extends Connection {
      * @return                              Retrieved data
      * @throws ConnectionNotOpenException   If the connection is not open
      */
-    public abstract <T extends SerializableObject> @Nullable T getObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws ConnectionNotOpenException;
+    public abstract @NotNull <T extends SerializableObject> CompletableFuture<T> getObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws ConnectionNotOpenException;
+
+    public abstract <T extends SerializableObject> @NotNull CompletableFuture<List<T>> getAllObjects(@NotNull Supplier<T> supplier) throws ConnectionNotOpenException;
 
     public abstract <T extends SerializableObject> void saveObjectByIdentifier(@NotNull T object) throws ConnectionNotOpenException;
 

@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisShardInfo;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public class RedisConnection extends DatabaseConnection {
@@ -40,7 +41,7 @@ public class RedisConnection extends DatabaseConnection {
 
 
     @Override
-    public @Nullable <T extends SerializableObject> T getObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws ConnectionNotOpenException {
+    public @NotNull <T extends SerializableObject> CompletableFuture<T> getObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws ConnectionNotOpenException {
         if(this.getConnection() == null || this.isClosed())
             throw new ConnectionNotOpenException("Redis");
 
