@@ -3,8 +3,10 @@ package com.lielamar.connections;
 import com.lielamar.connections.config.DatabaseConnectionConfig;
 import com.lielamar.connections.exceptions.ConnectionNotOpenException;
 import com.lielamar.connections.exceptions.EntryNotFoundException;
+import com.lielamar.connections.exceptions.SystemNotFoundException;
 import com.lielamar.connections.serializable.SerializableObject;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -28,13 +30,13 @@ public abstract class DatabaseConnection extends Connection {
      * @return                              Retrieved data
      * @throws ConnectionNotOpenException   If the connection is not open
      */
-    public abstract @NotNull <T extends SerializableObject> CompletableFuture<T> getObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws ConnectionNotOpenException;
+    public abstract @NotNull <T extends SerializableObject> CompletableFuture<@Nullable T> getObjectByIdentifier(@NotNull Supplier<@NotNull T> supplier, @NotNull String identifier) throws ConnectionNotOpenException;
 
-    public abstract <T extends SerializableObject> @NotNull CompletableFuture<List<T>> getAllObjects(@NotNull Supplier<T> supplier) throws ConnectionNotOpenException;
+    public abstract <T extends SerializableObject> @NotNull CompletableFuture<@NotNull List<@Nullable T>> getAllObjects(@NotNull Supplier<@NotNull T> supplier) throws ConnectionNotOpenException;
 
     public abstract <T extends SerializableObject> void saveObjectByIdentifier(@NotNull T object) throws ConnectionNotOpenException;
 
-    public abstract <T extends SerializableObject> void deleteObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws EntryNotFoundException, ConnectionNotOpenException;
+    public abstract <T extends SerializableObject> void deleteObjectByIdentifier(@NotNull Supplier<@NotNull T> supplier, @NotNull String identifier) throws EntryNotFoundException, ConnectionNotOpenException, SystemNotFoundException;
 
 
 //    /**

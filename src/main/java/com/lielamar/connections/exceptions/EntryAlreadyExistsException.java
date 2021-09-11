@@ -11,5 +11,5 @@ public class EntryAlreadyExistsException extends Exception {
     }
 
     @Override
-    public String getMessage() { return "A record for the provided entry already exists (" + identifierName + " as " + identifier + ")!"; }
+    public String getMessage() { return "A record for the provided entry already exists (" + identifierName + " \"" + identifier + "\")!"; }
 }

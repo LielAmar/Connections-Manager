@@ -2,6 +2,7 @@ package com.lielamar.connections;
 
 import com.lielamar.connections.exceptions.ConnectionNotOpenException;
 import com.lielamar.connections.exceptions.EntryNotFoundException;
+import com.lielamar.connections.exceptions.SystemNotFoundException;
 import com.lielamar.connections.serializable.SerializableDocument;
 import com.lielamar.connections.serializable.SerializableObject;
 import com.mongodb.ConnectionString;
@@ -63,7 +64,7 @@ public class MongoDBConnection extends DatabaseConnection {
 
 
     @Override
-    public @NotNull <T extends SerializableObject> CompletableFuture<T> getObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws ConnectionNotOpenException {
+    public @NotNull <T extends SerializableObject> CompletableFuture<@NotNull T> getObjectByIdentifier(@NotNull Supplier<@NotNull T> supplier, @NotNull String identifier) throws ConnectionNotOpenException {
         if(this.getConnection() == null || this.isClosed())
             throw new ConnectionNotOpenException("MongoDB");
 
@@ -88,7 +89,7 @@ public class MongoDBConnection extends DatabaseConnection {
     }
 
     @Override
-    public <T extends SerializableObject> @NotNull CompletableFuture<List<T>> getAllObjects(@NotNull Supplier<T> supplier) throws ConnectionNotOpenException {
+    public <T extends SerializableObject> @NotNull CompletableFuture<@NotNull List<@NotNull T>> getAllObjects(@NotNull Supplier<@NotNull T> supplier) throws ConnectionNotOpenException {
         if(this.getConnection() == null || this.isClosed())
             throw new ConnectionNotOpenException("MongoDB");
 
@@ -133,7 +134,7 @@ public class MongoDBConnection extends DatabaseConnection {
     }
 
     @Override
-    public <T extends SerializableObject> void deleteObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws EntryNotFoundException, ConnectionNotOpenException {
+    public <T extends SerializableObject> void deleteObjectByIdentifier(@NotNull Supplier<@NotNull T> supplier, @NotNull String identifier) throws EntryNotFoundException, ConnectionNotOpenException, SystemNotFoundException {
         if(this.getConnection() == null || this.isClosed())
             throw new ConnectionNotOpenException("MongoDB");
 
@@ -149,10 +150,10 @@ public class MongoDBConnection extends DatabaseConnection {
             throw new EntryNotFoundException(this.getConfig().getIdentifierFieldName(), identifier);
 
         if(oldDocument.containsKey(object.getSystem().getName())) {
-            oldDocument.remove(object.getSystem().getName());
-
-            Document updateQuery = new Document("$set", oldDocument);
+            Document updateQuery = new Document("$unset", new Document(object.getSystem().getName(), ""));
             collection.updateOne(Filters.eq(this.getConfig().getIdentifierFieldName(), object.getIdentifier()), updateQuery);
+        } else {
+            throw new SystemNotFoundException(object.getSystem().getName());
         }
     }
 }
