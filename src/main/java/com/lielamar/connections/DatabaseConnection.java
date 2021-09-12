@@ -24,44 +24,39 @@ public abstract class DatabaseConnection extends Connection {
 
 
     /**
-     * Retrieves an entry data from the connection
+     * Retrieves an object's data from the database
      *
+     * @param supplier                      Supplier of the object type
      * @param identifier                    Identifier of the entry to retrieve
-     * @return                              Retrieved data
+     * @return                              A CompletableFuture of the loaded object
      * @throws ConnectionNotOpenException   If the connection is not open
      */
     public abstract @NotNull <T extends SerializableObject> CompletableFuture<@Nullable T> getObjectByIdentifier(@NotNull Supplier<@NotNull T> supplier, @NotNull String identifier) throws ConnectionNotOpenException;
 
+    /**
+     * Retrieves objects' data from the database
+     *
+     * @param supplier                      Supplier of the object type
+     * @return                              A CompletableFuture of the loaded objects
+     * @throws ConnectionNotOpenException   If the connection is not open
+     */
     public abstract <T extends SerializableObject> @NotNull CompletableFuture<@NotNull List<@Nullable T>> getAllObjects(@NotNull Supplier<@NotNull T> supplier) throws ConnectionNotOpenException;
 
+    /**
+     * Saves an object's data in the database
+     *
+     * @param object                        Object to save in the database
+     * @throws ConnectionNotOpenException   If the connection is not open
+     */
     public abstract <T extends SerializableObject> void saveObjectByIdentifier(@NotNull T object) throws ConnectionNotOpenException;
 
+    /**
+     * Saves an object's data in the database
+     *
+     * @param supplier                      Supplier of the object type
+     * @throws EntryNotFoundException       If there's no entry with the given identifier in the database
+     * @throws ConnectionNotOpenException   If the connection is not open
+     * @throws SystemNotFoundException      If there's no index for the system within the object's data
+     */
     public abstract <T extends SerializableObject> void deleteObjectByIdentifier(@NotNull Supplier<@NotNull T> supplier, @NotNull String identifier) throws EntryNotFoundException, ConnectionNotOpenException, SystemNotFoundException;
-
-
-//    /**
-//     * Overwrites an existing entry's data in the connection
-//     *
-//     * @param identifier   Identifier of the entry to overwrite
-//     * @param newData      New data to set
-//     * @throws             EntryNotFoundException - If no entry with the given identifier was found
-//     */
-//    public abstract void setDataByIdentifier(String identifier, Map<String, Object> newData) throws EntryNotFoundException;
-//
-//    /**
-//     * Adds a new entry with its data to the connection
-//     *
-//     * @param identifier        Identifier of the new entry
-//     * @param dataToInsert      Data to insert
-//     * @throws                  EntryAlreadyExistsException - If an entry with the given identifier already exists
-//     */
-//    public abstract void insertDataByIdentifier(String identifier, Map<String, Object> dataToInsert) throws EntryAlreadyExistsException;
-//
-//    /**
-//     * Deletes an existing entry's data in the connection
-//     *
-//     * @param identifier   Identifier of the entry to delete
-//     * @throws             EntryNotFoundException - If no entry with the given identifier was found
-//     */
-//    public abstract void deleteDataByIdentifier(String identifier) throws EntryNotFoundException;
 }
