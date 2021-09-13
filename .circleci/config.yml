@@ -21,7 +21,7 @@ jobs:
       - run: mvn deploy --settings .circleci/settings.xml -DskipTests
 
 workflows:
-  build_and_test:
+  build_test_deploy:
     jobs:
       - build
       - test:
