@@ -1,0 +1,45 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:16.0.2
+    steps:
+      - checkout
+      - run: mvn clean install
+  test:
+    docker:
+      - image: cimg/openjdk:16.0.2
+    steps:
+      - checkout
+      - run: mvn test
+  deploy:
+    docker:
+      - image: cimg/openjdk:16.0.2
+    steps:
+      - checkout
+      - run: mvn deploy --settings .circleci/settings.xml -DskipTests
+
+workflows:
+  build_test_deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                -master
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                -master
+      - deploy:
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only:
+                -master

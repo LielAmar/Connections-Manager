@@ -10,6 +10,7 @@
         <version>1.0.0</version>
     </parent>
 
+    <groupId>com.lielamar.ConnectionsManager</groupId>
     <artifactId>MongoDBManager</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
@@ -17,10 +18,34 @@
     <name>MongoDB Manager</name>
     <url>http://lielamar.com</url>
 
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+    </properties>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
     <dependencies>
         <dependency>
-            <groupId>com.lielamar</groupId>
-            <artifactId>ConnectionsManager</artifactId>
+            <groupId>com.lielamar.ConnectionsManager</groupId>
+            <artifactId>common</artifactId>
             <version>1.0.0</version>
         </dependency>
 
