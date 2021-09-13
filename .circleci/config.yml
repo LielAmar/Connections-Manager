@@ -6,19 +6,19 @@ jobs:
       - image: cimg/openjdk:16.0.2
     steps:
       - checkout
-      - run: maven clean install
+      - run: mvn clean install
   test:
     docker:
       - image: cimg/openjdk:16.0.2
     steps:
       - checkout
-      - run: maven test
+      - run: mvn test
   deploy:
     docker:
       - image: cimg/openjdk:16.0.2
     steps:
       - checkout
-      - run: maven deploy --settings .circleci/settings.xml -DskipTests -Dcheckstyle.skip -B Prelease
+      - run: mvn deploy --settings .circleci/settings.xml -DskipTests -Dcheckstyle.skip -B Prelease
 
 workflows:
   build_and_test:
