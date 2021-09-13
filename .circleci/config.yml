@@ -9,26 +9,26 @@ workflows:
       - maven-deploy/code-checkout:
           executor-version: openjdk:16
       - maven-deploy/resolve-dependency:
-          executor-version: openjdk:16
+          executor-version: cimg/openjdk:16.0.2
           requires:
             - maven-deploy/code-checkout
       - maven-deploy/build:
-          executor-version: openjdk:16
+          executor-version: cimg/openjdk:16.0.2
           requires:
             - maven-deploy/resolve-dependency
       - maven-deploy/test:
-          executor-version: openjdk:16
+          executor-version: cimg/openjdk:16.0.2
           requires:
             - maven-deploy/build
           result-path: target/surefire-reports
       - maven-deploy/sonar-analysis:
-          executor-version: openjdk:16
+          executor-version: cimg/openjdk:16.0.2
           requires:
             - maven-deploy/test
       - maven-deploy/deploy:
           deploy-command: >-
             mvn deploy --settings .circleci/settings.xml -DskipTests
             -Dcheckstyle.skip -B -Prelease
-          executor-version: openjdk:16
+          executor-version: cimg/openjdk:16.0.2
           requires:
             - maven-deploy/sonar-analysis
