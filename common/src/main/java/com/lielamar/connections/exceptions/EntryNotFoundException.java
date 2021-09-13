@@ -11,5 +11,5 @@ public class EntryNotFoundException extends Exception {
     }
 
     @Override
-    public String getMessage() { return "No record found for the provided entry (" + identifierName + " as " + identifier + ")!"; }
+    public String getMessage() { return "No record found for the provided entry (" + identifierName + " \"" + identifier + "\")!"; }
 }
