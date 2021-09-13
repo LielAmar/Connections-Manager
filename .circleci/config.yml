@@ -8,27 +8,19 @@ workflows:
     jobs:
       - maven-deploy/code-checkout:
           executor-version: 16-buster
-      - maven-deploy/resolve-dependency:
-          executor-version: 16-buster
-          requires:
-            - maven-deploy/code-checkout
       - maven-deploy/build:
           executor-version: 16-buster
           requires:
-            - maven-deploy/resolve-dependency
+            - maven-deploy/code-checkout
       - maven-deploy/test:
           executor-version: 16-buster
           requires:
             - maven-deploy/build
           result-path: target/surefire-reports
-      - maven-deploy/sonar-analysis:
-          executor-version: 16-buster
-          requires:
-            - maven-deploy/test
       - maven-deploy/deploy:
           deploy-command: >-
             mvn deploy --settings .circleci/settings.xml -DskipTests
             -Dcheckstyle.skip -B -Prelease
           executor-version: 16-buster
           requires:
-            - maven-deploy/sonar-analysis
+            - maven-deploy/test
