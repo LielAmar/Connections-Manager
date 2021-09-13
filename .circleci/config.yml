@@ -1,26 +1,33 @@
 version: 2.1
 
-orbs:
-  maven-deploy: wasiqb/maven-deploy@2.1.0
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:16.0.2
+    steps:
+      - checkout
+      - run: maven clean install
+  test:
+    docker:
+      - image: cimg/openjdk:16.0.2
+    steps:
+      - checkout
+      - run: maven test
+  deploy:
+    docker:
+      - image: cimg/openjdk:16.0.2
+    steps:
+      - checkout
+      - run: maven deploy --settings .circleci/settings.xml -DskipTests -Dcheckstyle.skip -B Prelease
 
 workflows:
-  maven_test:
+  build_and_test:
     jobs:
-      - maven-deploy/code-checkout:
-          executor-version: 16-buster
-      - maven-deploy/build:
-          executor-version: 16-buster
+      - build
+      - test:
           requires:
-            - maven-deploy/code-checkout
-      - maven-deploy/test:
-          executor-version: 16-buster
+            - build
+      - deploy:
           requires:
-            - maven-deploy/build
-          result-path: target/surefire-reports
-      - maven-deploy/deploy:
-          deploy-command: >-
-            mvn deploy --settings .circleci/settings.xml -DskipTests
-            -Dcheckstyle.skip -B -Prelease
-          executor-version: 16-buster
-          requires:
-            - maven-deploy/test
+            - build
+            - test
