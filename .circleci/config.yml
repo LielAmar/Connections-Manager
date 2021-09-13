@@ -1,10 +1,45 @@
 version: 2.1
 
-orbs:
-  maven: circleci/maven@0.0.12
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:16.0.2
+    steps:
+      - checkout
+      - run: mvn clean install
+  test:
+    docker:
+      - image: cimg/openjdk:16.0.2
+    steps:
+      - checkout
+      - run: mvn test
+  deploy:
+    docker:
+      - image: cimg/openjdk:16.0.2
+    steps:
+      - checkout
+      - run: mvn deploy --settings .circleci/settings.xml -DskipTests
 
 workflows:
-  maven_test:
+  build_test_deploy:
     jobs:
-      - maven/test # checkout, build, test, and upload test results
-      - maven/deploy
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+      - deploy:
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only:
+                - master
