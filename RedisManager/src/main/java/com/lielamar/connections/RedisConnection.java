@@ -11,7 +11,13 @@ import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisShardInfo;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class RedisConnection extends DatabaseConnection {
 
@@ -40,22 +46,24 @@ public class RedisConnection extends DatabaseConnection {
 
 
     @Override
-    public @Nullable <T extends SerializableObject> T getObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws ConnectionNotOpenException {
+    public @NotNull <T extends SerializableObject> CompletableFuture<@Nullable T> getObjectByIdentifier(@NotNull Supplier<@NotNull T> supplier, @NotNull String identifier) throws ConnectionNotOpenException {
         if(this.getConnection() == null || this.isClosed())
             throw new ConnectionNotOpenException("Redis");
 
-        T object = supplier.get();
-        object.setIdentifier(identifier);
+        return CompletableFuture.supplyAsync(() -> {
+            T object = supplier.get();
+            object.setIdentifier(identifier);
 
-        String baseHash = object.getCollection().getName() + ":" + object.getSystem().getName();
+            String baseHash = object.getCollection().getName() + ":" + object.getSystem().getName();
 
-        SerializableDocument loadedData = this.load(baseHash, identifier);
-        if(!loadedData.isEmpty()) {
-            object.read(loadedData);
-            return object;
-        }
+            SerializableDocument loadedData = this.load(baseHash, identifier);
+            if(!loadedData.isEmpty()) {
+                object.read(loadedData);
+                return object;
+            }
 
-        return null;
+            return null;
+        });
     }
 
     private @NotNull SerializableDocument load(@NotNull String baseHash, @NotNull String identifier) {
@@ -77,6 +85,36 @@ public class RedisConnection extends DatabaseConnection {
         });
 
         return data;
+    }
+
+
+    @Override
+    public @NotNull <T extends SerializableObject> CompletableFuture<@NotNull List<@Nullable T>> getAllObjects(@NotNull Supplier<@NotNull T> supplier) throws ConnectionNotOpenException {
+        if(this.getConnection() == null || this.isClosed())
+            throw new ConnectionNotOpenException("Redis");
+
+        return CompletableFuture.supplyAsync(() -> {
+            List<T> elements = new ArrayList<>();
+
+            T instance = supplier.get();
+
+            Set<String> identifiers = new HashSet<>();
+
+            for(String key : this.getConnection().keys(instance.getCollection().getName() + ":")) {
+                identifiers.addAll(this.getConnection().hkeys(key)
+                        .stream().map(String::toString)
+                        .collect(Collectors.toSet()));
+            }
+
+            for(String identifier : identifiers) {
+                T object = supplier.get();
+                object.setIdentifier(identifier);
+                String baseHash = instance.getCollection().getName() + ":" + object.getSystem().getName();
+                object.read(new SerializableDocument(load(baseHash, identifier)));
+            }
+
+            return elements;
+        });
     }
 
 
@@ -107,7 +145,7 @@ public class RedisConnection extends DatabaseConnection {
 
 
     @Override
-    public <T extends SerializableObject> void deleteObjectByIdentifier(@NotNull Supplier<T> supplier, @NotNull String identifier) throws EntryNotFoundException, ConnectionNotOpenException {
+    public <T extends SerializableObject> void deleteObjectByIdentifier(@NotNull Supplier<@NotNull T> supplier, @NotNull String identifier) throws EntryNotFoundException, ConnectionNotOpenException {
         if(getConnection() == null || isClosed())
             throw new ConnectionNotOpenException("Redis");
 

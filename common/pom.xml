@@ -11,11 +11,11 @@
     </parent>
 
     <groupId>com.lielamar.ConnectionsManager</groupId>
-    <artifactId>RedisManager</artifactId>
+    <artifactId>common</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Redis Manager</name>
+    <name>Common</name>
     <url>http://lielamar.com</url>
 
 
@@ -41,18 +41,4 @@
         </plugins>
     </build>
 
-
-    <dependencies>
-        <dependency>
-            <groupId>com.lielamar.ConnectionsManager</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>3.6.1</version>
-        </dependency>
-    </dependencies>
 </project>

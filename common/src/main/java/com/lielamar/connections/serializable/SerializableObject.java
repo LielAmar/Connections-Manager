@@ -20,7 +20,7 @@ public abstract class SerializableObject implements Serializable {
     /**
      * Unique Identifier of the object in its collection
      *
-     * @return id of the object
+     * @return   identifier of the object
      */
     public @Nullable String getIdentifier() {
         return this.identifier;
