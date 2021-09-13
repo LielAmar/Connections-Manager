@@ -7,7 +7,7 @@ workflows:
   maven_test:
     jobs:
       - maven-deploy/code-checkout:
-          executor-version: openjdk:16
+          executor-version: cimg/openjdk:16.0.2
       - maven-deploy/resolve-dependency:
           executor-version: cimg/openjdk:16.0.2
           requires:
