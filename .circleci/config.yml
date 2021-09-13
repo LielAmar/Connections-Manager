@@ -23,11 +23,20 @@ jobs:
 workflows:
   build_test_deploy:
     jobs:
-      - build
+      - build:
+          branches:
+            only:
+              - master
       - test:
           requires:
             - build
+          branches:
+            only:
+              - master
       - deploy:
           requires:
             - build
             - test
+          branches:
+            only:
+              - master
