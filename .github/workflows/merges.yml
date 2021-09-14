@@ -1,0 +1,23 @@
+name: "Deploy on Merge"
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  test_pull_requests:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: "adopt"
+          java-version: "16"
+          settings-path: ".github/settings.xml"
+
+      - name: Deploy
+        run: mvn deploy
