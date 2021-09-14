@@ -1,5 +1,4 @@
 name: "Merges to Master"
-description: "Deploys a new build to the deployment server on Merges"
 
 on:
   pull_request:

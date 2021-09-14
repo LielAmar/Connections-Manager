@@ -1,5 +1,4 @@
 name: "Pull Requests Test"
-description: "Tests pull requests to the Master branch"
 
 on:
   pull_request:
