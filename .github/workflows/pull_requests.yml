@@ -6,6 +6,7 @@ on:
 
 jobs:
   test_pull_requests:
+
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -16,9 +17,13 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '16'
-          cache: 'maven'
-          check-latest: true
 #          settings-path: ${{ github.workspace }}
-      - run: mvn clean install
-      - run: mvn test
-      - run: mvn package
+
+      - name: Clean & Install
+        run: mvn clean install
+
+      - name: Test
+        run: mvn test
+
+      - name: Package
+        run: mvn package
