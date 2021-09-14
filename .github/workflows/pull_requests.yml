@@ -1,4 +1,5 @@
-name: Pull Requests Test
+name: "Pull Requests Test"
+description: "Tests pull requests to the Master branch"
 
 on:
   pull_request:
@@ -17,13 +18,16 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '16'
-#          settings-path: ${{ github.workspace }}
+        continue-on-error: false
 
       - name: Clean & Install
         run: mvn clean install
+        continue-on-error: false
 
       - name: Test
         run: mvn test
+        continue-on-error: false
 
       - name: Package
         run: mvn package
+        continue-on-error: false
