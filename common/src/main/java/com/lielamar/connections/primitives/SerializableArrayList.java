@@ -9,6 +9,11 @@ import java.util.ArrayList;
 
 public class SerializableArrayList<T> extends ArrayList<T> implements Serializable {
 
+    public SerializableArrayList(int initialCapacity) {
+        super(initialCapacity);
+    }
+
+
     @Override
     public @NotNull SerializableDocument write() {
         SerializableDocument document = new SerializableDocument();
