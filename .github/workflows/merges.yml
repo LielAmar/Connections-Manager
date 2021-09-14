@@ -21,6 +21,7 @@ jobs:
           LIELS_REPO_PASSWORD: ${{ secrets.LIELS_REPO_PASSWORD }}
           LIELS_REPO_USERNAME: ${{ secrets.LIELS_REPO_USERNAME }}
 
+      - name: Debug
         run: echo "repo username is $LIELS_REPO_USERNAME"
 
       - name: Deploy
