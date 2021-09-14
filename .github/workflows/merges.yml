@@ -4,6 +4,10 @@ on:
   push:
     branches: [ master ]
 
+env:
+  LIELS_REPO_PASSWORD: ${{ secrets.LIELS_REPO_PASSWORD }}
+  LIELS_REPO_USERNAME: ${{ secrets.LIELS_REPO_USERNAME }}
+
 jobs:
   merge_deploy:
 
@@ -17,12 +21,9 @@ jobs:
         with:
           distribution: "adopt"
           java-version: "16"
-        env:
-          LIELS_REPO_PASSWORD: ${{ secrets.LIELS_REPO_PASSWORD }}
-          LIELS_REPO_USERNAME: ${{ secrets.LIELS_REPO_USERNAME }}
 
       - name: Debug
-        run: echo "repo username is $LIELS_REPO_USERNAME"
+        run: echo "repo username is ${{ env.LIELS_REPO_USERNAME }}"
 
       - name: Deploy
         run: mvn deploy --settings .github/settings.xml
