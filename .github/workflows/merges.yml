@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  test_pull_requests:
+  merge_deploy:
 
     runs-on: ubuntu-latest
     permissions:
@@ -17,7 +17,6 @@ jobs:
         with:
           distribution: "adopt"
           java-version: "16"
-          settings-path: ".github/settings.xml"
 
       - name: Deploy
-        run: mvn deploy
+        run: mvn deploy --settings .github/settings.xml
