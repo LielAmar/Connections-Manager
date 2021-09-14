@@ -1,4 +1,4 @@
-name: "Merges to Master"
+name: "Deploy on Merge"
 
 on:
   push:
