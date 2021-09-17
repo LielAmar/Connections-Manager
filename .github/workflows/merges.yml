@@ -22,8 +22,5 @@ jobs:
           distribution: "adopt"
           java-version: "16"
 
-      - name: Debug
-        run: echo "repo username is ${{ env.LIELS_REPO_USERNAME }}"
-
       - name: Deploy
         run: mvn deploy --settings .github/settings.xml
