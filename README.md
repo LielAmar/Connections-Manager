@@ -27,12 +27,6 @@ You can install Connections Manager using Maven/Gradle:
         <artifactId>common</artifactId>
         <version>${version}</version>
     </dependency>
-
-    <dependency>
-        <groupId>com.lielamar.ConnectionsManager</groupId>
-        <artifactId>mongo</artifactId>
-        <version>${version}</version>
-    </dependency>
     
     <dependency>
         <groupId>com.lielamar.ConnectionsManager</groupId>
