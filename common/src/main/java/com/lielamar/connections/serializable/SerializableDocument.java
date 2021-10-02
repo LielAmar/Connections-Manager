@@ -46,10 +46,10 @@ public class SerializableDocument extends HashMap<String, Object> {
     public @NotNull String getOrDefault(@NotNull String key, @NotNull String defaultValue) { return (String) super.getOrDefault(key, defaultValue); }
     public @NotNull Character getOrDefault(@NotNull String key, char defaultValue) { return (Character) super.getOrDefault(key, defaultValue); }
     public @NotNull Boolean getOrDefault(@NotNull String key, boolean defaultValue) { return (Boolean) super.getOrDefault(key, defaultValue); }
-    public @NotNull Byte getOrDefault(@NotNull String key, byte defaultValue) { return ((Number) super.getOrDefault(key, defaultValue)).byteValue(); }
-    public @NotNull Short getOrDefault(@NotNull String key, short defaultValue) { return ((Number) super.getOrDefault(key, defaultValue)).shortValue(); }
-    public @NotNull Integer getOrDefault(@NotNull String key, int defaultValue) { return ((Number) super.getOrDefault(key, defaultValue)).intValue(); }
-    public @NotNull Long getOrDefault(@NotNull String key, long defaultValue) { return ((Number) super.getOrDefault(key, defaultValue)).longValue(); }
+    public @NotNull Byte getOrDefault(@NotNull String key, byte defaultValue) { return Byte.parseByte(super.getOrDefault(key, defaultValue) + ""); }
+    public @NotNull Short getOrDefault(@NotNull String key, short defaultValue) { return Short.parseShort(super.getOrDefault(key, defaultValue) + ""); }
+    public @NotNull Integer getOrDefault(@NotNull String key, int defaultValue) { return Integer.parseInt(super.getOrDefault(key, defaultValue) + ""); }
+    public @NotNull Long getOrDefault(@NotNull String key, long defaultValue) { return Long.parseLong(super.getOrDefault(key, defaultValue) + ""); }
     public @NotNull Double getOrDefault(@NotNull String key, double defaultValue) { return (double) super.getOrDefault(key, defaultValue); }
     public @NotNull Float getOrDefault(@NotNull String key, float defaultValue) { return ((Double) super.getOrDefault(key, defaultValue)).floatValue(); }
     public @NotNull String[] getOrDefault(@NotNull String key, @NotNull String[] defaultValue) { return (String[]) this.getOrDefault(key, defaultValue); }
