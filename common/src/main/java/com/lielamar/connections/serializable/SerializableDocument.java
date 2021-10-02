@@ -60,6 +60,8 @@
 //    }
 //}
 
+package com.lielamar.connections.serializable;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.NotNull;
@@ -69,7 +71,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 public class SerializableDocument extends HashMap<String, Object> {
 

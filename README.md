@@ -59,16 +59,16 @@ In order to create a new Connection Integration you need to import the `base pro
 
 Create a class and extend `DatabaseConnection` if your connection is to a database, or `Connection` if it's a different type of connection.
 In this class you need to implement multiple methods, most notably `getObjectByIdentifier`, `getAllObjects`, `saveObjectByIdentifier` and `deleteObjectByIdentifier`.
-Those methods will handle everything related to your connection, and notice that they all use the `SerializableObject` type.
+Those methods will handle everything related to your connection, and notice that they all use the `T_SerializableObject` type.
 
-### The SerializableObject type
-`SerializableObject` is used to define objects you want to be used in any connection.
-It has 2 main methods: `write` & `read`. The former writes a SerializableDocument containing all information on the object, and returns it.
-The latter receives an existing SerializableDocument and updates the local values of the object according to the given document.
+### The T_SerializableObject type
+`T_SerializableObject` is used to define objects you want to be used in any connection.
+It has 2 main methods: `write` & `read`. The former writes a T_SerializableDocument containing all information on the object, and returns it.
+The latter receives an existing T_SerializableDocument and updates the local values of the object according to the given document.
 
 Example object:
 ```java
-public class TestPlayer extends SerializableObject {
+public class TestPlayer extends T_SerializableObject {
 
     public String rank;
     public int coins;
@@ -94,8 +94,8 @@ public class TestPlayer extends SerializableObject {
     public @NotNull SystemType getSystem() { return new SystemType("GLOBAL"); }
 
     @Override
-    public @NotNull SerializableDocument write() {
-        SerializableDocument document = new SerializableDocument();
+    public @NotNull T_SerializableDocument write() {
+        T_SerializableDocument document = new T_SerializableDocument();
         document.put("rank", this.rank);
         document.put("coins", this.coins);
         document.put("xp", this.xp);
@@ -104,7 +104,7 @@ public class TestPlayer extends SerializableObject {
     }
 
     @Override
-    public void read(@Nullable SerializableDocument document) {
+    public void read(@Nullable T_SerializableDocument document) {
         if(document == null) return;
         
         this.rank = document.getOrDefault("rank", this.rank);
@@ -113,7 +113,7 @@ public class TestPlayer extends SerializableObject {
     }
 ```
 
-All connections use SerializableObject's `read` and `write` methods to save and load data from the connection, but it is not limited to only that.
+All connections use T_SerializableObject's `read` and `write` methods to save and load data from the connection, but it is not limited to only that.
 One usecase can be sending SerializableObjects through Web Sockets in certain requests.
 
 ## Contributing
