@@ -6,8 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class SerializableDocument extends HashMap<String, Object> {
 
@@ -36,6 +38,9 @@ public class SerializableDocument extends HashMap<String, Object> {
     public @Nullable Long getLong(@NotNull String key) { return (Long) this.get(key); }
     public @Nullable Double getDouble(@NotNull String key) { return (Double) this.get(key); }
     public @Nullable Float getFloat(@NotNull String key) { return (Float) this.get(key); }
+    public @Nullable String[] getStringArray(@NotNull String key) { return (String[]) this.get(key); }
+    public @Nullable List<String> getStringList(@NotNull String key) { return (List<String>) this.get(key); }
+    public @Nullable <T> List<T> getList(@NotNull String key, Supplier<T> instance) { return (List<T>) this.get(key); }
     public @Nullable SerializableDocument getDocument(@NotNull String key) { return (SerializableDocument) this.get(key); }
 
     public @NotNull String getOrDefault(@NotNull String key, @NotNull String defaultValue) { return (String) super.getOrDefault(key, defaultValue); }
@@ -47,6 +52,9 @@ public class SerializableDocument extends HashMap<String, Object> {
     public @NotNull Long getOrDefault(@NotNull String key, long defaultValue) { return ((Number) super.getOrDefault(key, defaultValue)).longValue(); }
     public @NotNull Double getOrDefault(@NotNull String key, double defaultValue) { return (double) super.getOrDefault(key, defaultValue); }
     public @NotNull Float getOrDefault(@NotNull String key, float defaultValue) { return ((Double) super.getOrDefault(key, defaultValue)).floatValue(); }
+    public @NotNull String[] getOrDefault(@NotNull String key, @NotNull String[] defaultValue) { return (String[]) this.getOrDefault(key, defaultValue); }
+    public @NotNull List<String> getOrDefault(@NotNull String key, @NotNull List<String> defaultValue) { return this.getOrDefault(key, defaultValue); }
+    public @NotNull <T> List<T> getOrDefault(@NotNull String key, @NotNull List<T> defaultValue, Supplier<T> instance) { return (List<T>) this.getOrDefault(key, defaultValue); }
 
 
     public static @NotNull SerializableDocument parse(@NotNull String json) {
