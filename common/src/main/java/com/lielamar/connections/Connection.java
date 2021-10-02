@@ -13,12 +13,12 @@ public abstract class Connection {
 
     protected ConnectionConfig config;
 
-    public Connection(ConnectionConfig config) {
+    public Connection(@Nullable ConnectionConfig config) {
         this.config = config;
     }
 
 
-    public @NotNull ConnectionConfig getConfig() { return this.config; }
+    public @Nullable ConnectionConfig getConfig() { return this.config; }
     public @Nullable Closeable getConnection() {
         return this.connection;
     }

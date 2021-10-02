@@ -35,7 +35,7 @@ public abstract class SerializableObject implements Serializable {
     /**
      * Database, Collection and System to use when saving/retrieving the object
      */
-    public abstract @NotNull DatabaseType getDatabase();
-    public abstract @NotNull CollectionType getCollection();
-    public abstract @NotNull SystemType getSystem();
+    public abstract @Nullable DatabaseType getDatabase();
+    public abstract @Nullable CollectionType getCollection();
+    public abstract @Nullable SystemType getSystem();
 }
