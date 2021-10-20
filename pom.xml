@@ -6,11 +6,11 @@
 
     <groupId>com.lielamar</groupId>
     <artifactId>ConnectionsManager</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <packaging>pom</packaging>
 
     <name>Connections Manager</name>
-    <url>http://lielamar.com</url>
+    <url>https://lielamar.com</url>
 
 
     <modules>
@@ -76,7 +76,7 @@
             <dependency>
                 <groupId>com.lielamar.ConnectionsManager</groupId>
                 <artifactId>common</artifactId>
-                <version>1.0.6</version>
+                <version>1.0.7</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

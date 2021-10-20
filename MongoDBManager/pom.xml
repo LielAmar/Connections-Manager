@@ -7,16 +7,16 @@
     <parent>
         <groupId>com.lielamar</groupId>
         <artifactId>ConnectionsManager</artifactId>
-        <version>1.0.6</version>
+        <version>1.0.7</version>
     </parent>
 
     <groupId>com.lielamar.ConnectionsManager</groupId>
     <artifactId>MongoDBManager</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <packaging>jar</packaging>
 
     <name>MongoDB Manager</name>
-    <url>http://lielamar.com</url>
+    <url>https://lielamar.com</url>
 
 
     <properties>
@@ -46,7 +46,7 @@
         <dependency>
             <groupId>com.lielamar.ConnectionsManager</groupId>
             <artifactId>common</artifactId>
-            <version>1.0.6</version>
+            <version>1.0.7</version>
         </dependency>
 
         <dependency>

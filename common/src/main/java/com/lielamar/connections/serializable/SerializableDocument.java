@@ -63,6 +63,7 @@
 package com.lielamar.connections.serializable;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -76,7 +77,9 @@ public class SerializableDocument extends HashMap<String, Object> {
 
     public SerializableDocument() { super(); }
     public SerializableDocument(@NotNull Map<String, Object> document) { super(document); }
-    public SerializableDocument(@NotNull String json) { super(new Gson().fromJson(json, new TypeToken<Map<String, Object>>(){}.getType())); }
+    public SerializableDocument(@NotNull String json) throws JsonSyntaxException {
+        super(new Gson().fromJson(json, new TypeToken<Map<String, Object>>(){}.getType()));
+    }
 
 
     public <T> T get(@NotNull Object key, @NotNull Class<T> clazz) {
